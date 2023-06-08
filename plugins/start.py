@@ -1,3 +1,4 @@
+
 # (©)Codexbotz
 # Recode by @mrismanaziz
 # t.me/SharingUserbot & t.me/Lunatic0de
@@ -15,12 +16,12 @@ from config import (
     PROTECT_CONTENT,
     START_MSG,
 )
-from database.sql import add_user, delete_user, full_userbase, query_msg
+from database.sql import add_user, full_userbase, query_msg
 from pyrogram import filters
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked
 from pyrogram.types import InlineKeyboardMarkup, Message
 
-from helper_func import decode, get_messages, subsall, subsch, subsgc
+from helper_func import decode, get_messages, subsall, subsch, subsgc, substai, subslg, substr, subsml
 
 from .button import fsub_button, start_button
 
@@ -46,7 +47,7 @@ async def _human_time_duration(seconds):
     return ", ".join(parts)
 
 
-@Bot.on_message(filters.command("start") & filters.private & subsall & subsch & subsgc)
+@Bot.on_message(filters.command("start") & filters.private & subsall & subsch & subsgc & substai & subslg & substr & subsml)
 async def start_command(client: Bot, message: Message):
     id = message.from_user.id
     user_name = (
@@ -141,8 +142,8 @@ async def start_command(client: Bot, message: Message):
                 id=message.from_user.id,
             ),
             reply_markup=InlineKeyboardMarkup(out),
-            disable_web_page_preview=True,
             quote=True,
+            disable_web_page_preview=True,
         )
 
 
@@ -202,10 +203,8 @@ async def send_text(client: Bot, message: Message):
                     await broadcast_msg.copy(chat_id, protect_content=PROTECT_CONTENT)
                     successful += 1
                 except UserIsBlocked:
-                    await delete_user(chat_id)
                     blocked += 1
                 except InputUserDeactivated:
-                    await delete_user(chat_id)
                     deleted += 1
                 except BaseException:
                     unsuccessful += 1

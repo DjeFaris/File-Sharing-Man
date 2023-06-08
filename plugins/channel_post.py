@@ -9,7 +9,7 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from bot import Bot
-from config import ADMINS, CHANNEL_ID, DISABLE_CHANNEL_BUTTON, LOGGER
+from config import ADMINS, CHANNEL_ID, DISABLE_CHANNEL_BUTTON
 from helper_func import encode
 
 
@@ -17,24 +17,7 @@ from helper_func import encode
     filters.private
     & filters.user(ADMINS)
     & ~filters.command(
-        [
-            "start",
-            "users",
-            "broadcast",
-            "ping",
-            "uptime",
-            "batch",
-            "logs",
-            "genlink",
-            "delvar",
-            "getvar",
-            "setvar",
-            "speedtest",
-            "update",
-            "stats",
-            "vars",
-            "id",
-        ]
+        ["start", "users", "broadcast", "ping", "uptime", "batch", "genlink"]
     )
 )
 async def channel_post(client: Client, message: Message):
@@ -49,7 +32,7 @@ async def channel_post(client: Client, message: Message):
             chat_id=client.db_channel.id, disable_notification=True
         )
     except Exception as e:
-        LOGGER(__name__).warning(e)
+        print(e)
         await reply_text.edit_text("<b>Telah Terjadi Error...</b>")
         return
     converted_id = post_message.message_id * abs(client.db_channel.id)
@@ -74,10 +57,7 @@ async def channel_post(client: Client, message: Message):
     )
 
     if not DISABLE_CHANNEL_BUTTON:
-        try:
-            await post_message.edit_reply_markup(reply_markup)
-        except Exception:
-            pass
+        await post_message.edit_reply_markup(reply_markup)
 
 
 @Bot.on_message(
@@ -103,5 +83,5 @@ async def new_post(client: Client, message: Message):
     )
     try:
         await message.edit_reply_markup(reply_markup)
-    except Exception:
-        pass
+    except Exception as e:
+        print(e)
